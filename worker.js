@@ -16,10 +16,11 @@ export default {
       new Response(JSON.stringify(data), { status, headers: { ...cors, "Content-Type": "application/json" } });
 
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
-    const sql = neon(env.DATABASE_URL);
     const url = new URL(req.url);
 
     try {
+      if (!env.DATABASE_URL) return json({ error: "DATABASE_URL no está configurada en el Worker" }, 500);
+      const sql = neon(env.DATABASE_URL);
       if (req.method === "GET" && url.pathname === "/evals") {
         const rows = await sql`SELECT key, evaluador, circle, scores, total, pct, ts FROM rdp_evals ORDER BY ts DESC`;
         return json(rows.map(r => ({ _id: r.key, evaluador: r.evaluador, circle: r.circle,
@@ -51,7 +52,7 @@ export default {
       }
       return json({ error: "not found" }, 404);
     } catch (e) {
-      return json({ error: "server error" }, 500);
+      return json({ error: "server error", detail: String(e && e.message || e).slice(0, 200) }, 500);
     }
   },
 };
