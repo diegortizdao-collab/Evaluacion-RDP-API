@@ -47,12 +47,18 @@ export default {
         const rows = await sql`SELECT id, nombre, area FROM rdp_catalog ORDER BY lower(nombre)`;
         return json(rows);
       }
-      const isAdminRoute = url.pathname === "/admin/check" || url.pathname.startsWith("/circles/");
+      const isAdminRoute = url.pathname === "/admin/check" || url.pathname.startsWith("/circles/")
+        || (req.method === "DELETE" && url.pathname.startsWith("/evals/"));
       if (isAdminRoute) {
         const adminKey = await secret(env.ADMINRDP_KEY);
         if (!adminKey) return json({ error: "ADMINRDP_KEY no está configurada en el Worker" }, 503);
         if (!safeEqual(req.headers.get("X-Admin-Key") || "", adminKey)) return json({ error: "clave incorrecta" }, 401);
         if (url.pathname === "/admin/check") return json({ ok: true });
+        if (req.method === "DELETE" && url.pathname.startsWith("/evals/")) {
+          const ek = decodeURIComponent(url.pathname.slice("/evals/".length)).slice(0, 200);
+          await sql`DELETE FROM rdp_evals WHERE key = ${ek}`;
+          return json({ ok: true });
+        }
         const cm = url.pathname.match(/^\/circles\/([^/]+)$/);
         if (!cm) return json({ error: "not found" }, 404);
         const id = decodeURIComponent(cm[1]).slice(0, 120);
