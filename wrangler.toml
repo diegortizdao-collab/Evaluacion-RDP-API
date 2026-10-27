@@ -1,6 +1,8 @@
 name = "evaluacion-rdp-api"
 main = "worker.js"
 compatibility_date = "2025-01-01"
+# No borrar las variables/secretos cargados en el panel al desplegar desde GitHub
+keep_vars = true
 
 [vars]
 # Origen permitido (GitHub Pages). Sin barra final.
