@@ -1,0 +1,9 @@
+name = "evaluacion-rdp-api"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# Origen permitido (GitHub Pages). Sin barra final.
+ALLOWED_ORIGIN = "https://diegortizdao-collab.github.io"
+
+# Secreto (no va en este archivo):  wrangler secret put DATABASE_URL
