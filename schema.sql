@@ -8,3 +8,11 @@ CREATE TABLE IF NOT EXISTS rdp_evals (
   ts         BIGINT NOT NULL
 );
 CREATE INDEX IF NOT EXISTS rdp_evals_circle_idx ON rdp_evals (lower(circle));
+
+-- Catálogo de RDP a evaluar (lo administra quien tenga la clave de administración)
+CREATE TABLE IF NOT EXISTS rdp_catalog (
+  id     TEXT PRIMARY KEY,
+  nombre TEXT NOT NULL UNIQUE,
+  area   TEXT NOT NULL DEFAULT '',
+  ts     BIGINT NOT NULL
+);
