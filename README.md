@@ -9,7 +9,7 @@ Endpoints: `GET /evals` y `PUT /evals/:key`. El total (sobre 100) se recalcula e
 ## Despliegue (Cloudflare, conectado a GitHub)
 1. Workers & Pages → Create → Import a repository → `Evaluacion-RDP-API` (carpeta raíz: `/`).
 2. Nombre del Worker: `evaluacion-rdp-api`.
-3. Settings → Variables and secrets → secreto `DATABASE_URL` (connection string de Neon, botón *Connect*).
+3. Settings → Variables and secrets → secreto `NEON_URL` (connection string de Neon, botón *Connect*).
 4. Copiar la URL del Worker en `config.js` → `API_URL` del repo de la app.
 
 ---

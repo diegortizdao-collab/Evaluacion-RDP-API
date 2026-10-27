@@ -19,8 +19,10 @@ export default {
     const url = new URL(req.url);
 
     try {
-      if (!env.DATABASE_URL) return json({ error: "DATABASE_URL no está configurada en el Worker" }, 500);
-      const sql = neon(env.DATABASE_URL);
+      const dbUrl = env.NEON_URL;
+      if (typeof dbUrl !== "string" || !dbUrl.startsWith("postgres"))
+        return json({ error: "NEON_URL no está configurada como texto (Secret) en el Worker" }, 500);
+      const sql = neon(dbUrl);
       if (req.method === "GET" && url.pathname === "/evals") {
         const rows = await sql`SELECT key, evaluador, circle, scores, total, pct, ts FROM rdp_evals ORDER BY ts DESC`;
         return json(rows.map(r => ({ _id: r.key, evaluador: r.evaluador, circle: r.circle,
