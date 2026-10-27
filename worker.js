@@ -49,8 +49,8 @@ export default {
       }
       const isAdminRoute = url.pathname === "/admin/check" || url.pathname.startsWith("/circles/");
       if (isAdminRoute) {
-        const adminKey = await secret(env.ADMIN_KEY);
-        if (!adminKey) return json({ error: "ADMIN_KEY no está configurada en el Worker" }, 503);
+        const adminKey = await secret(env.ADMINRDP_KEY);
+        if (!adminKey) return json({ error: "ADMINRDP_KEY no está configurada en el Worker" }, 503);
         if (!safeEqual(req.headers.get("X-Admin-Key") || "", adminKey)) return json({ error: "clave incorrecta" }, 401);
         if (url.pathname === "/admin/check") return json({ ok: true });
         const cm = url.pathname.match(/^\/circles\/([^/]+)$/);
